@@ -7,6 +7,42 @@ namespace cyberbot {
         return new Pin(p)
     }
 
+    function init(){
+        while (true) {​​​​​
+            try {​​​​​
+                pins.i2cReadBuffer(93, 1)
+            }​​​​​ 
+            catch (error) {​​​​​
+                serial.writeLine("Error:");
+                serial.writeLine(error);
+                continue;
+            }​​​​​
+            finally {​​​​​
+                pins.setPull(DigitalPin.P8, PinPullMode.PullUp)
+                basic.pause(10)
+                let mybuff = Buffer.fromArray([12])
+                pins.i2cWriteBuffer(93, mybuff)
+                basic.pause(10)
+                while (true) {​​​​​
+                    try {​​​​​
+                        let i2cBuffer = pins.i2cReadBuffer(93, 1,false)
+                        serial.writeLine("NUMBER:")
+                        serial.writeNumber(i2cBuffer.getNumber(NumberFormat.Int8LE, 0))
+                    }​​​​​
+                    catch (error){​​​​​
+                        serial.writeLine("Error2:");
+                        serial.writeLine(error);
+                        continue;
+                    }​​​​​
+                    finally {​​​​​
+                        break
+                    }​​​​​
+                }​​​​​
+                break
+            }​​​​​
+        }​​​​​
+    }
+
     export class Pin {
         pA: number;
         pB: number;
@@ -14,6 +50,7 @@ namespace cyberbot {
         constructor(p = 27, q = 33){
             this.pA = p;
             this.pB = q;
+            init();
         }
 
         private botDisable(): void{
