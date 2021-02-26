@@ -126,9 +126,7 @@ namespace functional{
                 basic.pause(10)
                 while (true) {​​​​​
                     try {​​​​​
-                        let i2cBuffer = pins.i2cReadBuffer(93, 1,false)
-                        serial.writeLine("NUMBER:")
-                        serial.writeNumber(i2cBuffer.getNumber(NumberFormat.Int8LE, 0))
+                        pins.i2cReadBuffer(93, 1)
                     }​​​​​
                     catch (error){​​​​​
                         serial.writeLine("Error2:");
@@ -148,6 +146,7 @@ namespace functional{
             pins.setPull(DigitalPin.P8, PinPullMode.PullNone);
             basic.pause(200);
             control.reset();
+            console.log("disabled")
         }
 
 
@@ -155,23 +154,22 @@ namespace functional{
             let a = Buffer.fromArray([1, p, q, s]);
             if (d !== null){
                 let b = Buffer.fromArray([Math.round(d)]);
-                Buffer.concat([a,b]);
-                //a.concat(b);
+                a = Buffer.concat([a,b]);
             }
             if (f !== null){
                 let b = Buffer.fromArray([Math.round(f)]);
-                Buffer.concat([a,b]);
-                //a.concat(b);
+                a = Buffer.concat([a,b]);
             }         
             try{
                 pins.i2cWriteBuffer(93, a)
                 let e = Buffer.fromArray([0,c])
                 pins.i2cWriteBuffer(93, e)
-                c = 0x01
+                c = 1
                 while ( c !== 0){
-                    let b = Buffer.fromArray([0x00])
+                    let b = Buffer.fromArray([0])
                     pins.i2cWriteBuffer(93, b)
                     c = pins.i2cReadNumber(93, NumberFormat.Int8LE)
+                    console.log(c)
                 }
             }
             catch{
@@ -185,5 +183,10 @@ namespace functional{
             if (s > 1 || s < 0){s = 4} 
             else if (s === 0){s = 2}
             send_c(p, s)
+        }
+
+        //% block="%pin tone freq %f dur %d "
+        export function tone(p: number, f: number, d: number): void{
+            send_c(p, 13, 33, 0, d, f);
         }
 }
