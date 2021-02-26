@@ -93,6 +93,11 @@ namespace cyberbot {
             this.send_c(s)
         }
 
+        //% block="%pin tone freq %f dur %d "
+        public tone(f: number, d: number): void{
+            this.send_c(13, 0, d, f);
+        }
+
 
     }
     
