@@ -4,16 +4,21 @@ namespace functional{
     
     //% block
     export function connect(){
-        while (true){
-            let initialRead = pins.i2cReadBuffer(93, 1).toHex()
-            if (initialRead != '00'){
-                console.log('GO')
-                pins.setPull(DigitalPin.P0, PinPullMode.PullUp)
+        while (true) {
+            if (pins.i2cReadNumber(93, NumberFormat.UInt16LE) != 0) {
+                pins.setPull(DigitalPin.P8, PinPullMode.PullUp)
                 pause(10)
-                let mybuff = Buffer.fromHex('0c')
-                pins.i2cWriteBuffer(93, mybuff)
+                pins.i2cWriteNumber(93, 12, NumberFormat.UInt16LE)
                 pause(10)
+                while (true) {
+                    if (pins.i2cReadNumber(93, NumberFormat.UInt16LE) != 0) {
+                        console.log("second reading num: " + pins.i2cReadNumber(93, NumberFormat.UInt16LE))
+                        console.log("second reading hex:" + pins.i2cReadBuffer(93, 8).toHex())
+                        break
+                    }
+                }
                 break
+                pause(10)
             }
         }
     }
@@ -27,27 +32,30 @@ namespace functional{
 
 
     function send_c(p: number, c:number, q=33, s=0, d:number=null, f:number=null): void{
-            let a = Buffer.fromArray([1, p, q, s]);
-            console.log("a = " + a.toHex())
+            let args = Buffer.fromArray([1, p, q, s]);
+            console.log("args = " + args.toHex())
             if (d != null){
-                let b = Buffer.fromArray([Math.round(d)]);
-                a = Buffer.concat([a,b]);
+                let duration = pins.createBuffer(4)
+                duration.setNumber(NumberFormat.UInt16LE, 0, Math.round(d))
+                args = Buffer.concat([args, duration]);
             }
             if (f != null){
-                let b = Buffer.fromArray([Math.round(f)]);
-                a = Buffer.concat([a,b]);
+                let freq = pins.createBuffer(4)
+                freq.setNumber(NumberFormat.UInt16LE, 0, Math.round(f))
+                args = Buffer.concat([args,freq]);
             }         
             try{
-                pins.i2cWriteBuffer(93, a)
-                let e = Buffer.fromArray([0,c])
-                console.log("e = " + e.toHex())
-                pins.i2cWriteBuffer(93, e)
-                c = 0x01
-                while ( c != 0x00){
-                    let b = Buffer.fromArray([0x00])
+                let command = pins.createBuffer(2)
+                command.setNumber(NumberFormat.UInt8LE, 1, c)
+
+                pins.i2cWriteBuffer(93, args)
+                pins.i2cWriteBuffer(93, command)
+                
+                let check = '0001'
+                while ( check != '0000'){
+                    let b = Buffer.fromHex('0000')
                     pins.i2cWriteBuffer(93, b)
-                    c = pins.i2cReadNumber(93, NumberFormat.Int8LE)
-                    console.log(c)
+                    check = pins.i2cReadBuffer(93, 2).toHex()
                 }
             }
             catch{
@@ -75,7 +83,7 @@ namespace functional{
         export function write_digital(p: number, s: number): void{
             if (s > 1 || s < 0){s = 4} 
             else if (s === 0){s = 2}
-            send(p, s)
+            send_c(p, s)
             console.log("done")
         }
 
