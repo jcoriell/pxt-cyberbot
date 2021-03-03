@@ -34,57 +34,50 @@ namespace functional{
     function send_c(p: number, c:number, q=33, s=0, d:number=null, f:number=null): void{
             let args = Buffer.fromArray([1, p, q, s]);
             console.log("args = " + args.toHex())
-            if (d != null){
+            if (d !== null){
                 let duration = pins.createBuffer(4)
                 duration.setNumber(NumberFormat.UInt16LE, 0, Math.round(d))
                 args = Buffer.concat([args, duration]);
             }
-            if (f != null){
+            if (f !== null){
                 let freq = pins.createBuffer(4)
                 freq.setNumber(NumberFormat.UInt16LE, 0, Math.round(f))
                 args = Buffer.concat([args,freq]);
-            }         
-            try{
-                let command = pins.createBuffer(2)
-                command.setNumber(NumberFormat.UInt8LE, 1, c)
-
-                pins.i2cWriteBuffer(93, args)
-                pins.i2cWriteBuffer(93, command)
-                
-                let check = '0001'
-                while ( check != '0000'){
-                    let b = Buffer.fromHex('0000')
-                    pins.i2cWriteBuffer(93, b)
-                    check = pins.i2cReadBuffer(93, 2).toHex()
-                }
-            }
-            catch{
-                botDisable()
-            }
-
-        }
-
-        function send(p: number, c:number, q=33, s=0, d:number=null, f:number=null): void{
-            let a = Buffer.fromArray([1, p, q, s]);
-            console.log("a = " + a.toHex())
-            pins.i2cWriteBuffer(93, a)
-
-            let e = Buffer.fromArray([0,c])
-            pins.i2cWriteBuffer(93, e)
-            console.log(e.toHex())
-
+            }      
+            console.log("allargs = " + args.toHex())
+            pins.i2cWriteBuffer(93, args) 
             pause(10)
+            console.log("args written")
             
-            pins.i2cWriteNumber(93, 0, NumberFormat.Int8LE)
-    
+            let command = pins.createBuffer(2)
+            command.setNumber(NumberFormat.UInt8LE, 1, c)
+            console.log("command = " + command.toHex())
+            pins.i2cWriteBuffer(93, command)
+            pause(10)
+            console.log("command written")
+            let read = pins.i2cReadBuffer(93, 4).toHex()
+            console.log("Read is " + read)    
+            let check = '0001'
+            while ( check !== '0000'){
+                let b = Buffer.fromHex('0000')
+                pins.i2cWriteBuffer(93, b)
+                pause(10)
+                console.log("wrote b as " + b.toHex())
+                check = pins.i2cReadBuffer(93, 2).toHex()
+                console.log("check is " + check)
+            }   
+
+            console.log('---------------------------------')
+
         }
 
         //% block="%p write digital %s"
         export function write_digital(p: number, s: number): void{
             if (s > 1 || s < 0){s = 4} 
             else if (s === 0){s = 2}
+            console.log("Writing digital on " + p + "with a value of " + s)
             send_c(p, s)
-            console.log("done")
+            console.log("Done sending command.")
         }
 
         //% block="%pin tone freq %f dur %d "
