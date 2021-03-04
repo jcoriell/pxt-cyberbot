@@ -29,12 +29,12 @@ namespace cyberbot{
             let args = Buffer.fromArray([1, pin, q, s]);
             if (d !== null){
                 let duration = pins.createBuffer(4)
-                duration.setNumber(NumberFormat.Int16LE, 0, Math.round(d))
+                duration.setNumber(NumberFormat.Int32LE, 0, Math.round(d))
                 args = Buffer.concat([args, duration]);
             }
             if (f !== null){
                 let freq = pins.createBuffer(4)
-                freq.setNumber(NumberFormat.Int16LE, 0, Math.round(f))
+                freq.setNumber(NumberFormat.Int32LE, 0, Math.round(f))
                 args = Buffer.concat([args,freq]);
             }   
             pins.i2cWriteBuffer(93, args);
