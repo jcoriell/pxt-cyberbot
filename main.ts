@@ -1,11 +1,6 @@
+cyberbot.connect()
+cyberbot.servoSpeed(18, 75)
+cyberbot.servoSpeed(19, 300)
 basic.forever(function () {
-    cyberbot.connect()
-    cyberbot.write_digital(20, 1)
-    basic.pause(500)
-    cyberbot.write_digital(20, 0)
-    basic.pause(500)
-    cyberbot.write_digital(21, 1)
-    basic.pause(500)
-    cyberbot.write_digital(21, 0)
-    basic.pause(500)
+	
 })
