@@ -209,12 +209,12 @@ namespace cyberbot{
         // forward with speed as percent and duration in seconds (+ pin dropdown)
         /**
          * Forward at a certain speed for a duration. 
-         * @param speed the percentage of max speed
+         * @param speed as the percentage of max speed
          * @param duration of time in seconds
          * @param leftPin Pin for left servo. eg: BotPin.Pin18
          * @param rightPin Pin for left servo. eg: BotPin.Pin19
          */
-        //% block="speed %speed duration %duration || %leftPin %rightPin"
+        //% block="Forward with speed %speed for duration %duration || %leftPin %rightPin"
         //% speed.min=0
         //% speed.max=100
         //% inlineInputMode=inline
