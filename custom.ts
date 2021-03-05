@@ -207,17 +207,24 @@ namespace cyberbot{
         }
 
         // forward with speed as percent and duration in seconds (+ pin dropdown)
-        //% block="left %lv right %rv time %d"
+        /**
+         * Forward at a certain speed for a duration. 
+         * @param speed the percentage of max speed
+         * @param duration of time in seconds
+         * @param leftPin Pin for left servo. eg: BotPin.Pin18
+         * @param rightPin Pin for left servo. eg: BotPin.Pin19
+         */
+        //% block="speed %speed duration %duration || %leftPin %rightPin"
         //% speed.min=0
         //% speed.max=100
-        export function forward(speed:number, duration: number, lPin?: BotPin, rPin?: BotPin): void{
-            let lspeed = -1 * (speed * 0.75)
-            let rspeed = (speed * 0.75)
-            sendCommand(lPin, 25, 0, lspeed);
-            sendCommand(rPin, 25, 0, rspeed);
+        export function forward(speed:number, duration: number, leftPin?: BotPin, rightPin?: BotPin): void{
+            let leftSpeed = -1 * (speed * 0.75)
+            let rightSpeed = (speed * 0.75)
+            sendCommand(leftPin, 25, 0, leftSpeed);
+            sendCommand(rightPin, 25, 0, rightSpeed);
             pause(duration * 100)
-            sendCommand(lPin, 28, 0, null);
-            sendCommand(rPin, 28, 0, null);
+            sendCommand(leftPin, 28, 0, null);
+            sendCommand(rightPin, 28, 0, null);
         }
         // back  
         // left 
