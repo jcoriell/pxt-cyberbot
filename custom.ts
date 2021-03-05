@@ -116,7 +116,7 @@ namespace cyberbot{
             sendCommand(pin, cmd, 0, null, null);
         }
 
-        //% block="pin %pin write analogue %f"
+        //% block="pin %pin write analog %f"
         export function writeAnalog(pin: number, f: number): void{
             sendCommand(pin, PWM_OUT, 0, f, null);
         }
