@@ -2,18 +2,7 @@
 
 namespace cyberbot{
 
-    //const COMMAND       = 0
-    //const PIN1          = 1
-    //const PIN2          = 2
-    //const STATE         = 3
-    //const ARG1          = 4
-    //const ARG2          = 8
-    //const ARG3          = 12
-    //const ARG4          = 16
-    //const ARG5          = 20
-    //const RETVAL        = 24
-    //const STRBUF        = 28
-
+    // commands
     const HIGH          = 1
     const LOW           = 2
     //const INPUT         = 3
@@ -51,9 +40,10 @@ namespace cyberbot{
     //const PWR_BRN_DET   = 14    
 
     const ADDRESS         = 93
+    
     let isConnected = false;
 
-    export function connect(){
+    function connect(){
         while (true) {
             if (pins.i2cReadNumber(ADDRESS, NumberFormat.UInt16LE) !== 0){
                 pins.digitalWritePin(DigitalPin.P8, 1)
@@ -109,6 +99,7 @@ namespace cyberbot{
 
         }
 
+        // change cmd param to dropdown with HIGH/LOW
         //% block="pin %p write digital %s"
         export function writeDigital(pin: number, cmd: number): void{
             if (cmd > 1 || cmd < 0){cmd = TOGGLE;}
@@ -127,7 +118,7 @@ namespace cyberbot{
 
         //% block="pin %pin pulse out %d"
         export function pulseOut(pin: number, d: number): void{
-            sendCommand(pin, PULSOUT, 0, d, null)
+            sendCommand(pin, PULSOUT, 0, d, null);
         }
 
         function pulseIn(){
@@ -144,14 +135,26 @@ namespace cyberbot{
 
 
         /**
-        * Play a tone. 
+        * Play a tone for a specific duration.
+        * @param pin connected to the speaker, eg: 22
+        * @param frequency of the tone
+        * @param duration of the tone in milliseconds, eg: 1000
+        */
+        //% block="pin %pin tone freq %f dur %d "
+        export function tone(pin: number, frequency: number, duration: number): void{
+            sendCommand(pin, FREQOUT, 0, duration, frequency);
+        }
+
+        /// this one will have a beat length associated with it (quarter, half, whole, etc.)
+        /**
+        * Play a note. 
         * @param pin connected to the speaker, eg: 22
         * @param frequency of the tone
         * @param duration of the tone in milliseconds, eg: 1000
         */
         //% block="pin %pin tone freq %f dur %d "
         //% frequency.fieldEditor="note" frequency.defl="262"
-        export function tone(pin: number, frequency: number, duration: number): void{
+        export function note(pin: number, frequency: number, duration: number): void{
             sendCommand(pin, FREQOUT, 0, duration, frequency);
         }
 
@@ -161,10 +164,10 @@ namespace cyberbot{
 
 
         //% block="pin %pin servo angle %v"
-        export function servoAngle(pin: number, v:number=null):void{
+        export function servoAngle(pin: number, angle:number=null):void{
             let cmd = SERVO_ANGLE;
-            if (v === null){cmd = SERVO_DISABLE;}
-            sendCommand(pin, cmd, 0, v, null)
+            if (angle === null){cmd = SERVO_DISABLE;}
+            sendCommand(pin, cmd, 0, angle, null);
         }
 
         /**
@@ -190,4 +193,50 @@ namespace cyberbot{
 
         }
 
+
+
+        //% block="left %lv right %rv time %d"
+        export function servoSteering(lv:number, rv: number, d: number): void{
+            let lspeed = -1 * lv
+            let rspeed = rv
+            sendCommand(18, SERVO_SPEED, 0, lspeed);
+            sendCommand(19, SERVO_SPEED, 0, rspeed);
+            pause(d)
+            sendCommand(18, SERVO_DISABLE, 0, null);
+            sendCommand(19, SERVO_DISABLE, 0, null);
+        }
+
+        // forward with speed as percent and duration in seconds (+ pin dropdown)
+        // back  
+        // left 
+        // right 
+        // stop 
+        // navigation 
+
+}
+
+enum BotPins{
+    Pin0,
+    Pin1,
+    Pin2,
+    Pin3,
+    Pin4,
+    Pin5, 
+    Pin6, 
+    Pin7, 
+    Pin8, 
+    Pin9, 
+    Pin10, 
+    Pin11, 
+    Pin12, 
+    Pin13, 
+    Pin14, 
+    Pin15, 
+    Pin16, 
+    Pin17, 
+    Pin18, 
+    Pin19,
+    Pin20, 
+    Pin21, 
+    Pin22
 }
