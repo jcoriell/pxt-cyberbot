@@ -2,8 +2,8 @@
 
 namespace cyberbot{
 
-    
-    //% block
+    let isConnected = false;
+
     export function connect(){
         while (true) {
             if (pins.i2cReadNumber(93, NumberFormat.UInt16LE) !== 0){
@@ -11,6 +11,7 @@ namespace cyberbot{
                 pause(10)
                 pins.i2cWriteNumber(93, 12, NumberFormat.UInt16LE)
                 pause(10)
+                isConnected = true;
                 break
             }
         }
@@ -25,6 +26,9 @@ namespace cyberbot{
 
 
     function sendCommand(pin: number, cmd:number, q=33, s=0, d:number=null, f:number=null): void{
+            if (isConnected === false){
+                connect()
+            }
             // build args and write
             let args = Buffer.fromArray([1, pin, q, s]);
             if (d !== null){
@@ -51,21 +55,21 @@ namespace cyberbot{
 
         }
 
-        //% block="%p write digital %s"
+        //% block="pin %p write digital %s"
         export function writeDigital(pin: number, cmd: number): void{
             if (cmd > 1 || cmd < 0){cmd = 4} 
             else if (cmd === 0){cmd = 2}
             sendCommand(pin, cmd)
         }
 
-        //% block="%p servo speed %s"
-        export function servoSpeed(pin: number, v:number = null): void{
+        //% block="pin %pin servo speed %velocity"
+        export function servoSpeed(pin: number, velocity:number = null): void{
             let cmd = 25;
-            if (v === null){cmd = 28};
-            sendCommand(pin, cmd, 33, 0, v);
+            if (velocity === null){cmd = 28};
+            sendCommand(pin, cmd, 33, 0, velocity);
         }
 
-        //% block="%pin tone freq %f dur %d "
+        //% block="pin %pin tone freq %f dur %d "
         export function tone(pin: number, f: number, d: number): void{
             sendCommand(pin, 13, 33, 0, d, f);
         }
