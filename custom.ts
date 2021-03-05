@@ -24,7 +24,7 @@ namespace cyberbot{
     //const GETSTATES     = 8
     //const PAUSE         = 9
     //const PULSIN        = 10
-    //const PULSOUT       = 11
+    const PULSOUT       = 11
     //const COUNT         = 12
     const FREQOUT       = 13
     //const RCTIME        = 16
@@ -32,10 +32,10 @@ namespace cyberbot{
     //const SHIFTOUT      = 18
     //const SEROUT        = 19
     //const SERIN         = 20
-    //const SERVO_ANGLE   = 24
+    const SERVO_ANGLE   = 24
     const SERVO_SPEED   = 25
     //const SERVO_SET     = 26
-    //const SERVO_SETRAMP = 27
+    const SERVO_SETRAMP = 27
     const SERVO_DISABLE = 28
     //const SERVO_DRIVE   = 34
     //const PING_ECHO     = 29
@@ -125,8 +125,9 @@ namespace cyberbot{
 
         }
 
-        function pulseOut(){
-
+        //% block="pin %pin pulse out %d"
+        export function pulseOut(pin: number, d: number): void{
+            sendCommand(pin, PULSOUT, 0, d, null)
         }
 
         function pulseIn(){
@@ -150,8 +151,11 @@ namespace cyberbot{
 
         }
 
-        function servoAngle(){
-            
+        //% block="pin %pin servo angle %v"
+        export function servoAngle(pin: number, v:number=null):void{
+            let cmd = SERVO_ANGLE;
+            if (v === null){cmd = SERVO_DISABLE;}
+            sendCommand(pin, cmd, 0, v, null)
         }
 
         //% block="pin %pin servo speed %velocity"
@@ -161,8 +165,9 @@ namespace cyberbot{
             sendCommand(pin, cmd, 0, velocity, null);
         }
 
-        function servoAccelerate(){
-
+        //% block="pin %pin servo accelerate %acceleration"
+        export function servoAccelerate(pin: number, acceleration: number):void{
+            sendCommand(pin, SERVO_SETRAMP, 0, acceleration, null)
         }
 
         function detach(){
