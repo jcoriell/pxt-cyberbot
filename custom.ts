@@ -142,7 +142,15 @@ namespace cyberbot{
 
         }
 
+
+        /**
+        * Play a tone. 
+        * @param pin connected to the speaker, eg: 22
+        * @param frequency of the tone
+        * @param duration of the tone in milliseconds, eg: 1000
+        */
         //% block="pin %pin tone freq %f dur %d "
+        //% frequency.fieldEditor="note" frequency.defl="262"
         export function tone(pin: number, frequency: number, duration: number): void{
             sendCommand(pin, FREQOUT, 0, duration, frequency);
         }
