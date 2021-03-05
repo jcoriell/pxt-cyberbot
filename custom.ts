@@ -1,11 +1,12 @@
 
-
+//% color=#555555 weight=100 icon="\uf2db" block="cyber:bot"
+//% groups=['General','Servos', 'Sound', 'Navigation']
 namespace cyberbot{
 
     // commands
     const HIGH          = 1
     const LOW           = 2
-    //const INPUT         = 3
+    const INPUT         = 3
     const TOGGLE        = 4
     //const SETDIRS       = 5
     //const GETDIRS       = 6
@@ -95,76 +96,80 @@ namespace cyberbot{
 
         }
 
-        function read_r(){
-
+        function read_r(): number {
+            pins.i2cWriteNumber(ADDRESS, 18, NumberFormat.UInt32LE)
+            return pins.i2cReadBuffer(ADDRESS, 4)[3]
         }
 
         // change cmd param to dropdown with HIGH/LOW
-        //% block="pin %p write digital %s"
-        export function writeDigital(pin: number, cmd: number): void{
-            if (cmd > 1 || cmd < 0){cmd = TOGGLE;}
-            else if (cmd === 0){cmd = LOW;}
-            sendCommand(pin, cmd, 0, null, null);
+        //% block="%p write digital %s"
+        //% group="General"
+        export function writeDigital(pin: BotPin, state: State): void{
+            sendCommand(pin, state, 0, null, null);
         }
 
-        //% block="pin %pin write analog %f"
-        export function writeAnalog(pin: number, f: number): void{
+        //% block="%pin write analog %f"
+        //% group="General"
+        export function writeAnalog(pin: BotPin, f: number): void{
             sendCommand(pin, PWM_OUT, 0, f, null);
         }
 
-        function readDigital(){
-
+        //% block="%pin read digital"
+        //% group="General"
+        export function readDigital(pin: BotPin): number {
+            sendCommand(pin, INPUT, 0, null, null)
+            return read_r()
         }
 
-        //% block="pin %pin pulse out %d"
-        export function pulseOut(pin: number, d: number): void{
+        //% block="%pin pulse out %d"
+        //% group="General"
+        export function pulseOut(pin: BotPin, d: number): void{
             sendCommand(pin, PULSOUT, 0, d, null);
         }
 
-        function pulseIn(){
+        //% block
+        //% group="General"
+        export function pulseIn(){
 
         }
 
-        function pulseCount(){
+        //% block
+        //% group="General"
+        export function pulseCount(){
 
         }
 
-        function rcTime(){
+        //% block
+        //% group="General"
+        export function rcTime(){
 
         }
 
 
         /**
         * Play a tone for a specific duration.
-        * @param pin connected to the speaker, eg: 22
+        * @param pin connected to the speaker, eg: BotPin.Pin22
         * @param frequency of the tone
         * @param duration of the tone in milliseconds, eg: 1000
         */
-        //% block="pin %pin tone freq %f dur %d "
-        export function tone(pin: number, frequency: number, duration: number): void{
+        //% block="%pin tone freq %f dur %d "
+        //% pin.fieldEditor="gridpicker"
+        //% group="Sound"
+        export function tone(pin: BotPin, frequency: number, duration: number): void{
             sendCommand(pin, FREQOUT, 0, duration, frequency);
         }
 
-        /// this one will have a beat length associated with it (quarter, half, whole, etc.)
-        /**
-        * Play a note. 
-        * @param pin connected to the speaker, eg: 22
-        * @param frequency of the tone
-        * @param duration of the tone in milliseconds, eg: 1000
-        */
-        //% block="pin %pin tone freq %f dur %d "
-        //% frequency.fieldEditor="note" frequency.defl="262"
-        export function note(pin: number, frequency: number, duration: number): void{
-            sendCommand(pin, FREQOUT, 0, duration, frequency);
-        }
 
-        function irDetect(){
+        //% block
+        //% group="General"
+        export function irDetect(){
 
         }
 
 
-        //% block="pin %pin servo angle %v"
-        export function servoAngle(pin: number, angle:number=null):void{
+        //% block="%pin servo angle %v"
+        //% group="Servos"
+        export function servoAngle(pin: BotPin, angle:number=null):void{
             let cmd = SERVO_ANGLE;
             if (angle === null){cmd = SERVO_DISABLE;}
             sendCommand(pin, cmd, 0, angle, null);
@@ -172,30 +177,48 @@ namespace cyberbot{
 
         /**
         * Set a servo's speed. 
-        * @param pin The pin connected to the servo, eg: 18
+        * @param pin The pin connected to the servo, eg: BotPin.Pin18
         * @param velocity The velocity of the servo from, eg: 0
         */
-        //% block="pin %pin servo speed %velocity"
+        //% block="%pin servo speed %velocity"
         //% velocity.min=-75 
         //% velocity.max=75
-        export function servoSpeed(pin: number, velocity:number = null): void{
+        //% group="Servos"
+        export function servoSpeed(pin: BotPin, velocity:number = null): void{
             let cmd = SERVO_SPEED;
             if (velocity === null){cmd = SERVO_DISABLE};
             sendCommand(pin, cmd, 0, velocity, null);
         }
 
-        //% block="pin %pin servo accelerate %acceleration"
-        export function servoAccelerate(pin: number, acceleration: number):void{
+        //% block="%pin servo accelerate %acceleration"
+        //% group="Servos"
+        export function servoAccelerate(pin: BotPin, acceleration: number):void{
             sendCommand(pin, SERVO_SETRAMP, 0, acceleration, null)
         }
 
-        function detach(){
+        //% block
+        //% group="General"
+        export function detach(){
 
         }
 
 
+        /**
+        * Play a note. 
+        * @param pin connected to the speaker, eg: BotPin.Pin22
+        * @param frequency of the tone, eg: Note.C5
+        * @param beatLength length of beat, eg: BeatFraction.Quarter
+        */
+        //% block="%pin play|note %note=device_note|for %duration=device_beat"
+        //% frequency.fieldEditor="note" frequency.defl="262"
+        //% group="Sound"
+        export function note(pin: BotPin, frequency: number, duration: number): void{
+            sendCommand(pin, FREQOUT, 0, duration, frequency);
+        }
+        
 
         //% block="left %lv right %rv time %d"
+        //% group="Navigation"
         export function servoSteering(lv:number, rv: number, d: number): void{
             let lspeed = -1 * lv
             let rspeed = rv
@@ -206,20 +229,21 @@ namespace cyberbot{
             sendCommand(19, SERVO_DISABLE, 0, null);
         }
 
-        // forward with speed as percent and duration in seconds (+ pin dropdown)
+        
         /**
          * Forward at a certain speed for a duration. 
          * @param speed as the percentage of max speed
          * @param duration of time in seconds
-         * @param leftPin Pin for left servo. eg: BotPin.Pin18
-         * @param rightPin Pin for left servo. eg: BotPin.Pin19
+         * @param leftPin Pin for left servo. eg: ServoPin.Pin18
+         * @param rightPin Pin for left servo. eg: ServoPin.Pin19
          */
         //% block="Forward with speed %speed for duration %duration || %leftPin %rightPin"
         //% speed.min=0
         //% speed.max=100
         //% inlineInputMode=inline
         //% expandableArgumentMode="toggle"
-        export function forward(speed:number, duration: number, leftPin?: BotPin, rightPin?: BotPin): void{
+        //% group="Navigation"
+        export function forward(speed: number, duration: number, leftPin?: ServoPin, rightPin?: ServoPin): void{
             let leftSpeed = -1 * (speed * 0.75)
             let rightSpeed = (speed * 0.75)
             sendCommand(leftPin, 25, 0, leftSpeed);
@@ -260,4 +284,16 @@ enum BotPin{
     Pin20, 
     Pin21, 
     Pin22
+}
+
+enum State{
+    High = 1,
+    Low = 2
+}
+
+enum ServoPin{
+    Pin16 = 16, 
+    Pin17 = 17, 
+    Pin18 = 18, 
+    Pin19 = 19
 }
