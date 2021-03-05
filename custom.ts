@@ -207,6 +207,18 @@ namespace cyberbot{
         }
 
         // forward with speed as percent and duration in seconds (+ pin dropdown)
+        //% block="left %lv right %rv time %d"
+        //% speed.min=0
+        //% speed.max=100
+        export function forward(speed:number, duration: number, lPin?: BotPin, rPin?: BotPin): void{
+            let lspeed = -1 * (speed * 0.75)
+            let rspeed = (speed * 0.75)
+            sendCommand(lPin, 25, 0, lspeed);
+            sendCommand(rPin, 25, 0, rspeed);
+            pause(duration * 100)
+            sendCommand(lPin, 28, 0, null);
+            sendCommand(rPin, 28, 0, null);
+        }
         // back  
         // left 
         // right 
@@ -215,7 +227,7 @@ namespace cyberbot{
 
 }
 
-enum BotPins{
+enum BotPin{
     Pin0,
     Pin1,
     Pin2,
