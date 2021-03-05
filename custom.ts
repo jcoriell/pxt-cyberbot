@@ -151,6 +151,7 @@ namespace cyberbot{
 
         }
 
+
         //% block="pin %pin servo angle %v"
         export function servoAngle(pin: number, v:number=null):void{
             let cmd = SERVO_ANGLE;
@@ -158,7 +159,14 @@ namespace cyberbot{
             sendCommand(pin, cmd, 0, v, null)
         }
 
+        /**
+        * Set a servo's speed. 
+        * @param pin The pin connected to the servo, eg: 18
+        * @param velocity The velocity of the servo from, eg: 0
+        */
         //% block="pin %pin servo speed %velocity"
+        //% velocity.min=-75 
+        //% velocity.max=75
         export function servoSpeed(pin: number, velocity:number = null): void{
             let cmd = SERVO_SPEED;
             if (velocity === null){cmd = SERVO_DISABLE};
