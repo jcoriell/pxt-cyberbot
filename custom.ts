@@ -1,5 +1,5 @@
 
-//% color=#555555 weight=100 icon="\uf2db" block="cyber:bot"
+//% color=#00C1D4 weight=100 icon="\uf2db" block="cyber:bot"
 //% groups=['General','Servos', 'Sound', 'Navigation']
 namespace cyberbot{
 
@@ -248,9 +248,44 @@ namespace cyberbot{
             let rightSpeed = (speed * 0.75)
             sendCommand(leftPin, 25, 0, leftSpeed);
             sendCommand(rightPin, 25, 0, rightSpeed);
-            pause(duration * 100)
+            pause(duration * 1000)
             sendCommand(leftPin, 28, 0, null);
             sendCommand(rightPin, 28, 0, null);
+        }
+
+        /**
+         * Move the bot in a direction for a certain number of seconds. 
+         * @param direction, eg: NavDirection.Forward
+         * @param duration of time in seconds, eg: 1
+         */
+        //% block="go %direction for %duration seconds"
+        //% speed.min=0
+        //% speed.max=100
+        //% group="Navigation"
+        export function nav(direction: NavDirection, duration: number): void{
+            let leftSpeed: number;
+            let rightSpeed: number;
+            if (direction === NavDirection.Forward){
+                leftSpeed = 75; 
+                rightSpeed = -75;
+            }
+            else if (direction === NavDirection.Reverse){
+                leftSpeed = -75; 
+                rightSpeed = 75;
+            }
+            else if (direction === NavDirection.Left){
+                leftSpeed = -75; 
+                rightSpeed = -75;
+            }
+            else if (direction === NavDirection.Right){
+                leftSpeed = 75; 
+                rightSpeed = 75;
+            }
+            sendCommand(18, 25, 0, leftSpeed);
+            sendCommand(19, 25, 0, rightSpeed);
+            pause(duration * 1000)
+            sendCommand(18, 28, 0, null);
+            sendCommand(19, 28, 0, null);
         }
         // back  
         // left 
@@ -296,4 +331,11 @@ enum ServoPin{
     Pin17 = 17, 
     Pin18 = 18, 
     Pin19 = 19
+}
+
+enum NavDirection{
+    Forward,
+    Reverse,
+    Left,
+    Right
 }
