@@ -217,6 +217,8 @@ namespace cyberbot{
         //% block="speed %speed duration %duration || %leftPin %rightPin"
         //% speed.min=0
         //% speed.max=100
+        //% inlineInputMode=inline
+        //% expandableArgumentMode="toggle"
         export function forward(speed:number, duration: number, leftPin?: BotPin, rightPin?: BotPin): void{
             let leftSpeed = -1 * (speed * 0.75)
             let rightSpeed = (speed * 0.75)
