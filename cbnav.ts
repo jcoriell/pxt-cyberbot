@@ -1,18 +1,51 @@
 
 namespace cyberbot{
     
-        
-
         //% block="left %lv right %rv time %d"
-        //%subcategory="Navigation"
+        //% subcategory="Navigation"
         export function servoSteering(lv:number, rv: number, d: number): void{
-            let lspeed = -1 * lv
-            let rspeed = rv
+            let lspeed = lv
+            let rspeed = -1*rv
+            showServos(lspeed, rspeed)
             sendCommand(18, SERVO_SPEED, 0, lspeed);
             sendCommand(19, SERVO_SPEED, 0, rspeed);
             pause(d)
             sendCommand(18, SERVO_DISABLE, 0, null);
             sendCommand(19, SERVO_DISABLE, 0, null);
+        }
+
+        function showServos(left: number, right: number): void{
+        //let empty = images.createImage(`. . . . .\n. . . . .\n# . . . #\n. . . . .\n. . . . .`)
+            led.plot(0, 2)
+            led.plot(4, 2)
+            if (left > 0) {led.plot(0, 1)}
+            if (left >= 60) {led.plot(0,0)}
+            if (left < 0) {led.plot(0, 3)}
+            if (left <= -60) {led.plot(0,4)}
+            if (right < 0) {led.plot(4, 1)}
+            if (right <= -60) {led.plot(4,0)}   
+            if (right > 0) {led.plot(4, 3)}
+            if (right >= 60) {led.plot(4,4)}
+        }
+
+        function servoLights(): void{
+            
+        }
+
+
+        /**
+        * Set a servo's speed. 
+        * @param pin The pin connected to the servo, eg: BotPin.Pin18
+        * @param velocity The velocity of the servo from, eg: 0
+        */
+        //% block="%pin servo speed %speed"
+        //% speed.shadow="speedPicker"
+        //% group="Servos"
+        export function servoVelocity(pin: BotPin, speed:number = null): void{
+            let cmd = SERVO_SPEED;
+            let velocity = speed * 0.75
+            if (speed === null){cmd = SERVO_DISABLE};
+            sendCommand(pin, cmd, 0, speed, null);
         }
 
         
@@ -32,11 +65,11 @@ namespace cyberbot{
         export function forward(speed: number, duration: number, leftPin?: ServoPin, rightPin?: ServoPin): void{
             let leftSpeed = -1 * (speed * 0.75)
             let rightSpeed = (speed * 0.75)
-            sendCommand(leftPin, 25, 0, leftSpeed);
-            sendCommand(rightPin, 25, 0, rightSpeed);
+            sendCommand(leftPin, SERVO_SPEED, 0, leftSpeed);
+            sendCommand(rightPin, SERVO_SPEED, 0, rightSpeed);
             pause(duration * 1000)
-            sendCommand(leftPin, 28, 0, null);
-            sendCommand(rightPin, 28, 0, null);
+            sendCommand(leftPin, SERVO_DISABLE, 0, null);
+            sendCommand(rightPin, SERVO_DISABLE, 0, null);
         }
 
         /**
@@ -67,11 +100,11 @@ namespace cyberbot{
                 leftSpeed = 75; 
                 rightSpeed = 75;
             }
-            sendCommand(18, 25, 0, leftSpeed);
-            sendCommand(19, 25, 0, rightSpeed);
+            sendCommand(18, SERVO_SPEED, 0, leftSpeed);
+            sendCommand(19, SERVO_SPEED, 0, rightSpeed);
             pause(duration * 1000)
-            sendCommand(18, 28, 0, null);
-            sendCommand(19, 28, 0, null);
+            sendCommand(18, SERVO_DISABLE, 0, null);
+            sendCommand(19, SERVO_DISABLE, 0, null);
         }
         // back  
         // left 
