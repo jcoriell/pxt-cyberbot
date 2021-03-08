@@ -45,9 +45,10 @@ namespace cyberbot{
     let isConnected = false;
 
     function connect(){
-        pins.digitalWritePin(DigitalPin.P8, 1)
+        
         while (true) {
             if (pins.i2cReadNumber(ADDRESS, NumberFormat.UInt16LE) !== 0){
+                pins.digitalWritePin(DigitalPin.P8, 1)
                 pause(10);
                 pins.i2cWriteNumber(ADDRESS, 12, NumberFormat.UInt16LE);
                 pause(10);
