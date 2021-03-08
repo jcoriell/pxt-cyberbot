@@ -166,7 +166,7 @@ namespace cyberbot{
         //% block
         //% group="General"
         export function irDetect(){
-
+            //reconstruct the buffer that is sent here
         }
 
 
@@ -202,7 +202,9 @@ namespace cyberbot{
         //% block
         //% group="General"
         export function detach(){
-
+            while (true){
+                readDigital(25);
+            }
         }
 
 
