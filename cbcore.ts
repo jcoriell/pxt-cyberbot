@@ -17,7 +17,7 @@ namespace cyberbot{
     export const PULSOUT       = 11
     export const COUNT         = 12
     export const FREQOUT       = 13
-    //const RCTIME        = 16
+    export const RCTIME        = 16
     //const SHIFTIN       = 17
     //const SHIFTOUT      = 18
     //const SEROUT        = 19
@@ -45,9 +45,9 @@ namespace cyberbot{
     let isConnected = false;
 
     function connect(){
+        pins.digitalWritePin(DigitalPin.P8, 1)
         while (true) {
             if (pins.i2cReadNumber(ADDRESS, NumberFormat.UInt16LE) !== 0){
-                pins.digitalWritePin(DigitalPin.P8, 1)
                 pause(10)
                 pins.i2cWriteNumber(ADDRESS, 12, NumberFormat.UInt16LE)
                 pause(10)
@@ -141,10 +141,11 @@ namespace cyberbot{
             return read_r();
         }
 
-        //% block
+        //% block="%pin rc time %s %d %f"
         //% group="General"
-        export function rcTime(){
-
+        export function rcTime(pin: BotPin, s:number): number{
+            sendCommand(pin, RCTIME, s, null, null);
+            return read_r();
         }
 
 
@@ -156,7 +157,7 @@ namespace cyberbot{
         */
         //% block="%pin tone freq %f dur %d "
         //% pin.fieldEditor="gridpicker"
-        //% group="Sound"
+        //% group="Piezo"
         export function tone(pin: BotPin, frequency: number, duration: number): void{
             sendCommand(pin, FREQOUT, 0, duration, frequency);
         }
