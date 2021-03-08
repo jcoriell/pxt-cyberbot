@@ -1,6 +1,6 @@
 
 //% color=#1D75B5 weight=100 icon="\uf2db" block="cyber:bot"
-//% groups=['General','Servos', 'Sound', 'Navigation']
+//% groups=['General','Servos', 'Piezo']
 namespace cyberbot{
 
     // commands
@@ -13,9 +13,9 @@ namespace cyberbot{
     //const SETSTATES     = 7
     //const GETSTATES     = 8
     //const PAUSE         = 9
-    //const PULSIN        = 10
+    export const PULSIN        = 10
     export const PULSOUT       = 11
-    //const COUNT         = 12
+    export const COUNT         = 12
     export const FREQOUT       = 13
     //const RCTIME        = 16
     //const SHIFTIN       = 17
@@ -127,16 +127,18 @@ namespace cyberbot{
             sendCommand(pin, PULSOUT, 0, d, null);
         }
 
-        //% block
+        //% block="%pin pulse in %s"
         //% group="General"
-        export function pulseIn(){
-
+        export function pulseIn(pin: BotPin, s: number): number{
+            sendCommand(pin, PULSIN, s, null, null);
+            return read_r();
         }
 
-        //% block
+        //% block="%pin pulse count %d"
         //% group="General"
-        export function pulseCount(){
-
+        export function pulseCount(pin: BotPin, d:number): number{
+            sendCommand(pin, COUNT, 0, d, null);
+            return read_r();
         }
 
         //% block

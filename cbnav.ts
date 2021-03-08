@@ -4,7 +4,7 @@ namespace cyberbot{
         
 
         //% block="left %lv right %rv time %d"
-        //% group="Navigation"
+        //%subcategory="Navigation"
         export function servoSteering(lv:number, rv: number, d: number): void{
             let lspeed = -1 * lv
             let rspeed = rv
@@ -28,7 +28,7 @@ namespace cyberbot{
         //% speed.max=100
         //% inlineInputMode=inline
         //% expandableArgumentMode="toggle"
-        //% group="Navigation"
+        //%subcategory="Navigation"
         export function forward(speed: number, duration: number, leftPin?: ServoPin, rightPin?: ServoPin): void{
             let leftSpeed = -1 * (speed * 0.75)
             let rightSpeed = (speed * 0.75)
@@ -47,7 +47,7 @@ namespace cyberbot{
         //% block="go %direction for %duration seconds"
         //% speed.min=0
         //% speed.max=100
-        //% group="Navigation"
+        //%subcategory="Navigation"
         export function nav(direction: NavDirection, duration: number): void{
             let leftSpeed: number;
             let rightSpeed: number;
