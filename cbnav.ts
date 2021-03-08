@@ -87,10 +87,10 @@ namespace cyberbot{
             leftIsRunning = true;
             rightIsRunning = true;
             control.inBackground(function () {
-                leftServoBlink();
+                leftServoIndicator(leftSpeed);
             })
             control.inBackground(function () {
-                rightServoBlink();
+                rightServoIndicator(rightSpeed);
             })
             pause(10)
         }
@@ -148,24 +148,40 @@ namespace cyberbot{
 
 
 
-        function leftServoBlink(){
+        function leftServoIndicator(speed:number){
             while (leftIsRunning){
-                for (let i = 0; i <= 4; i++){
-                    led.toggle(4, i)
-                    pause(100)
-                    led.toggle(4, i)
-                    pause(100)
+                if (speed > 0){
+                    for (let i = 0; i <= 4; i++){
+                        led.toggle(4, i)
+                        pause(100)
+                        led.toggle(4, i)
+                    }
+                }
+                else if (speed < 0){
+                    for (let i = 4; i >= 0; i--){
+                        led.toggle(4, i)
+                        pause(100)
+                        led.toggle(4, i)
+                    }
                 }
             }
         }
 
-        function rightServoBlink(){
+        function rightServoIndicator(speed:number){
             while (rightIsRunning){
-                for (let i = 0; i <= 4; i++){
-                    led.toggle(0, i)
-                    pause(100)
-                    led.toggle(0, i)
-                    pause(100)
+                if (speed < 0){
+                    for (let i = 0; i <= 4; i++){
+                        led.toggle(0, i)
+                        pause(100)
+                        led.toggle(0, i)
+                    }
+                }
+                else if (speed > 0){
+                    for (let i = 4; i >= 0; i--){
+                        led.toggle(0, i)
+                        pause(100)
+                        led.toggle(0, i)
+                    }
                 }
             }
         }
