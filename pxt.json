@@ -10,7 +10,10 @@
         "main.blocks",
         "main.ts",
         "README.md",
-        "custom.ts"
+        "custom.ts",
+        "cbcore.ts",
+        "cbpiezo.ts",
+        "cbnav.ts"
     ],
     "testFiles": [
         "test.ts"
