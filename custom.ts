@@ -1,5 +1,5 @@
 
-//% color=#00C1D4 weight=100 icon="\uf2db" block="cyber:bot"
+//% color=#1D75B5 weight=100 icon="\uf2db" block="cyber:bot"
 //% groups=['General','Servos', 'Sound', 'Navigation']
 namespace cyberbot{
 
