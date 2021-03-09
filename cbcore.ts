@@ -45,10 +45,10 @@ namespace cyberbot{
     let isConnected = false;
 
     function connect(){
-        
+
         while (true) {
             if (pins.i2cReadNumber(ADDRESS, NumberFormat.UInt16LE) !== 0){
-                pins.digitalWritePin(DigitalPin.P8, 1)
+                 pins.digitalWritePin(DigitalPin.P8, 1)
                 pause(10);
                 pins.i2cWriteNumber(ADDRESS, 12, NumberFormat.UInt16LE);
                 pause(10);
@@ -83,6 +83,7 @@ namespace cyberbot{
                 freq.setNumber(NumberFormat.Int32LE, 0, Math.round(f))
                 args = Buffer.concat([args,freq]);
             }   
+            console.log(args.toHex())
             pins.i2cWriteBuffer(ADDRESS, args);
             
             // build command and write
