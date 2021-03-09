@@ -4,6 +4,44 @@ namespace cyberbot{
         let leftIsRunning = false;
         let rightIsRunning = false;
 
+        function leftServoIndicator(speed:number){
+            while (leftIsRunning){
+                if (speed > 0){
+                    for (let i = 0; i <= 4; i++){
+                        led.toggle(4, i)
+                        pause(100)
+                        led.toggle(4, i)
+                    }
+                }
+                else if (speed < 0){
+                    for (let i = 4; i >= 0; i--){
+                        led.toggle(4, i)
+                        pause(100)
+                        led.toggle(4, i)
+                    }
+                }
+            }
+        }
+
+        function rightServoIndicator(speed:number){
+            while (rightIsRunning){
+                if (speed < 0){
+                    for (let i = 0; i <= 4; i++){
+                        led.toggle(0, i)
+                        pause(100)
+                        led.toggle(0, i)
+                    }
+                }
+                else if (speed > 0){
+                    for (let i = 4; i >= 0; i--){
+                        led.toggle(0, i)
+                        pause(100)
+                        led.toggle(0, i)
+                    }
+                }
+            }
+        }
+
 
         let leftServo = ServoPin.Pin18
         let rightServo = ServoPin.Pin19
@@ -133,12 +171,34 @@ namespace cyberbot{
             pause(10)
         }
 
+
+        /**
+         * Drive by specifying how fast each wheel should spin and for how long.
+         * @param leftSpeed is a percentage of the left wheel's full speed, eg: 100
+         * @param rightSpeed is a percentage of the right wheel's full speed, eg: 100
+         * @param time is time in seconds, eg: 1 
+         */
+        //% block="drive with | left wheel at %leftSpeed \\%  full speed, | right wheel at %rightSpeed \\% full speed, | for %time seconds"
+        //% subcategory="Navigation"
+        //% weight=25
+        //% leftSpeed.min=-100 leftSpeed.max=100 leftSpeed.shadow="speedPicker"
+        //% rightSpeed.min=-100 rightSpeed.max=100 rightSpeed.shadow="speedPicker"
+        export function precisionDrive(leftSpeed:number, rightSpeed: number, time: number): void{
+            leftSpeed = leftSpeed * 0.75
+            rightSpeed = rightSpeed * -0.75
+            sendCommand(leftServo, SERVO_SPEED, 0, leftSpeed);
+            sendCommand(rightServo, SERVO_SPEED, 0, rightSpeed);
+            pause(time*1000)
+            sendCommand(leftServo, SERVO_DISABLE, 0, null);
+            sendCommand(rightServo, SERVO_DISABLE, 0, null);
+        }
+
         /**
         * Stop the left servo and the right servo. 
         */
         //% block="stop"
         //% subcategory="Navigation"
-        //% weight=30
+        //% weight=0
         export function stop(): void{
             sendCommand(leftServo, SERVO_DISABLE, 0, null);
             sendCommand(rightServo, SERVO_DISABLE, 0, null);
@@ -147,77 +207,6 @@ namespace cyberbot{
         }
 
 
-
-        function leftServoIndicator(speed:number){
-            while (leftIsRunning){
-                if (speed > 0){
-                    for (let i = 0; i <= 4; i++){
-                        led.toggle(4, i)
-                        pause(100)
-                        led.toggle(4, i)
-                    }
-                }
-                else if (speed < 0){
-                    for (let i = 4; i >= 0; i--){
-                        led.toggle(4, i)
-                        pause(100)
-                        led.toggle(4, i)
-                    }
-                }
-            }
-        }
-
-        function rightServoIndicator(speed:number){
-            while (rightIsRunning){
-                if (speed < 0){
-                    for (let i = 0; i <= 4; i++){
-                        led.toggle(0, i)
-                        pause(100)
-                        led.toggle(0, i)
-                    }
-                }
-                else if (speed > 0){
-                    for (let i = 4; i >= 0; i--){
-                        led.toggle(0, i)
-                        pause(100)
-                        led.toggle(0, i)
-                    }
-                }
-            }
-        }
-
-
-
-
-
-        /** 
-        //% block="left %lv right %rv time %d"
-        //% subcategory="Navigation"
-        export function servoSteering(lv:number, rv: number, d: number): void{
-            let lspeed = lv
-            let rspeed = -1*rv
-            showServos(lspeed, rspeed)
-            sendCommand(18, SERVO_SPEED, 0, lspeed);
-            sendCommand(19, SERVO_SPEED, 0, rspeed);
-            pause(d)
-            sendCommand(18, SERVO_DISABLE, 0, null);
-            sendCommand(19, SERVO_DISABLE, 0, null);
-        }
-
-
-        function showServos(left: number, right: number): void{
-        //let empty = images.createImage(`. . . . .\n. . . . .\n# . . . #\n. . . . .\n. . . . .`)
-            led.plot(0, 2)
-            led.plot(4, 2)
-            if (left > 0) {led.plot(0, 1)}
-            if (left >= 60) {led.plot(0,0)}
-            if (left < 0) {led.plot(0, 3)}
-            if (left <= -60) {led.plot(0,4)}
-            if (right < 0) {led.plot(4, 1)}
-            if (right <= -60) {led.plot(4,0)}   
-            if (right > 0) {led.plot(4, 3)}
-            if (right >= 60) {led.plot(4,4)}
-        }
 
         /**
         * Set a servo's speed. 
