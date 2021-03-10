@@ -1,6 +1,6 @@
 
 //% color=#1D75B5 weight=100 icon="\uf2db" block="cyber:bot"
-//% groups=['Basic Read/Write', 'Servos', 'Other']
+//% groups='["Basic Read/Write", "Servos", "Other"]'
 namespace cyberbot{
 
     // commands
@@ -106,18 +106,21 @@ namespace cyberbot{
         // change cmd param to dropdown with HIGH/LOW
         //% block="%p write digital %s"
         //% group="Basic Read/Write"
+        //% weight=100
         export function writeDigital(pin: BotPin, state: State): void{
             sendCommand(pin, state, 0, null, null);
         }
 
         //% block="%pin write analog %f"
         //% group="Basic Read/Write"
+        //% weight=94
         export function writeAnalog(pin: BotPin, f: number): void{
             sendCommand(pin, PWM_OUT, 0, f, null);
         }
 
         //% block="%pin read digital"
         //% group="Basic Read/Write"
+        //% weight=98
         export function readDigital(pin: BotPin): number {
             sendCommand(pin, INPUT, 0, null, null)
             let result = read_r();
@@ -127,6 +130,7 @@ namespace cyberbot{
 
         //% block="%pin is high"
         //% group="Basic Read/Write"
+        //% weight=96
         export function readDigitalBoole(pin: BotPin): boolean {
             sendCommand(pin, INPUT, 0, null, null)
             let result = read_r();
