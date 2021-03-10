@@ -8,7 +8,8 @@ namespace cyberbot{
         */
         //% block="%pin play|note %note=device_note|for %duration=device_beat"
         //% frequency.fieldEditor="note" frequency.defl="262"
-        //%subcategory="Sound"
+        //% group="Other"
+        //% weight=104
         export function note(pin: BotPin, frequency: number, duration: number): void{
             sendCommand(pin, FREQOUT, 0, duration, frequency);
         }
