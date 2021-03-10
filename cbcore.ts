@@ -1,6 +1,6 @@
 
 //% color=#1D75B5 weight=100 icon="\uf2db" block="cyber:bot"
-//% groups=['General','Servos', 'Piezo']
+//% groups=['Basic Read/Write', 'Servos', 'Other']
 namespace cyberbot{
 
     // commands
@@ -105,46 +105,61 @@ namespace cyberbot{
 
         // change cmd param to dropdown with HIGH/LOW
         //% block="%p write digital %s"
-        //% group="General"
+        //% group="Basic Read/Write"
         export function writeDigital(pin: BotPin, state: State): void{
             sendCommand(pin, state, 0, null, null);
         }
 
         //% block="%pin write analog %f"
-        //% group="General"
+        //% group="Basic Read/Write"
         export function writeAnalog(pin: BotPin, f: number): void{
             sendCommand(pin, PWM_OUT, 0, f, null);
         }
 
         //% block="%pin read digital"
-        //% group="General"
+        //% group="Basic Read/Write"
         export function readDigital(pin: BotPin): number {
             sendCommand(pin, INPUT, 0, null, null)
-            return read_r()
+            let result = read_r();
+            if (result === 1){return 1;}
+            else {return 0;}
+        }
+
+        //% block="%pin is high"
+        //% group="Basic Read/Write"
+        export function readDigitalBoole(pin: BotPin): boolean {
+            sendCommand(pin, INPUT, 0, null, null)
+            let result = read_r();
+            if (result === 1){return true;}
+            else {return false;}
         }
 
         //% block="%pin pulse out %d"
-        //% group="General"
+        //% group="Other"
+        //% weight=100
         export function pulseOut(pin: BotPin, d: number): void{
             sendCommand(pin, PULSOUT, 0, d, null);
         }
 
         //% block="%pin pulse in %s"
-        //% group="General"
+        //% group="Other"
+        //% weight=98
         export function pulseIn(pin: BotPin, s: number): number{
             sendCommand(pin, PULSIN, s, null, null);
             return read_r();
         }
 
         //% block="%pin pulse count %d"
-        //% group="General"
+        //% group="Other"
+        //% weight=96
         export function pulseCount(pin: BotPin, d:number): number{
             sendCommand(pin, COUNT, 0, d, null);
             return read_r();
         }
 
         //% block="%pin rc time %s %d %f"
-        //% group="General"
+        //% group="Other"
+        //% weight=95
         export function rcTime(pin: BotPin, s:number): number{
             sendCommand(pin, RCTIME, s, null, null);
             return read_r();
@@ -159,14 +174,16 @@ namespace cyberbot{
         */
         //% block="%pin tone freq %f dur %d "
         //% pin.fieldEditor="gridpicker"
-        //% group="Piezo"
+        //% group="Other"
+        //% weight=102
         export function tone(pin: BotPin, frequency: number, duration: number): void{
             sendCommand(pin, FREQOUT, 0, duration, frequency);
         }
 
 
         //% block
-        //% group="General"
+        //% group="Other"
+        //% weight=94
         export function irDetect(){
             //reconstruct the buffer that is sent here
         }
@@ -174,6 +191,7 @@ namespace cyberbot{
 
         //% block="%pin servo angle %v"
         //% group="Servos"
+        //% weight=198
         export function servoAngle(pin: BotPin, angle:number=null):void{
             let cmd = SERVO_ANGLE;
             if (angle === null){cmd = SERVO_DISABLE;}
@@ -189,6 +207,7 @@ namespace cyberbot{
         //% velocity.min=-75 
         //% velocity.max=75
         //% group="Servos"
+        //% weight=200
         export function servoSpeed(pin: BotPin, velocity:number = null): void{
             let cmd = SERVO_SPEED;
             if (velocity === null){cmd = SERVO_DISABLE};
@@ -197,12 +216,13 @@ namespace cyberbot{
 
         //% block="%pin servo accelerate %acceleration"
         //% group="Servos"
+        //% weight=196
         export function servoAccelerate(pin: BotPin, acceleration: number):void{
             sendCommand(pin, SERVO_SETRAMP, 0, acceleration, null)
         }
 
         //% block
-        //% group="General"
+        //% group="Other"
         export function detach(){
             while (true){
                 readDigital(25);

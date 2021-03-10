@@ -110,7 +110,10 @@ namespace cyberbot{
         //% group="Directional"
         //% weight=200
         export function navForever(direction: NavDirection): void{
+            leftIsRunning = false;
+            rightIsRunning = false;
             stop();
+            pause(50)
             let leftSpeed: number;
             let rightSpeed: number;
             if (direction === NavDirection.Forward){
@@ -227,7 +230,6 @@ namespace cyberbot{
             sendCommand(rightServo, SERVO_DISABLE, 0, null);
             leftIsRunning = false;
             rightIsRunning = false;
-            pause(50)
         }
 
 
