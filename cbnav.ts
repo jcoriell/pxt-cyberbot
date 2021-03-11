@@ -4,7 +4,8 @@ namespace cyberbot{
         let navlightIsOn = false;
 
         /**
-         * Toggle the navigation lights
+         * Toggle the navigation lights.
+         * The blinking indicates the rotational motion of the wheel when viewed from above.
          * @param control the lights
          */
         //% block="navigation light %control"
@@ -22,17 +23,19 @@ namespace cyberbot{
         function leftNavLight(speed:number){
             while (leftIsRunning){
                 if (speed > 0){
-                    for (let i = 0; i <= 4; i++){
-                        led.toggle(4, i)
+                    for (let i = 2; i <= 6; i++){
+                        if (!leftIsRunning){break}
+                        led.toggle(4, i % 5)
                         pause(100)
-                        led.toggle(4, i)
+                        led.toggle(4, i % 5)
                     }
                 }
                 else if (speed < 0){
-                    for (let i = 4; i >= 0; i--){
-                        led.toggle(4, i)
+                    for (let i = 7; i >= 3; i--){
+                        if (!leftIsRunning){break}
+                        led.toggle(4, i % 5)
                         pause(100)
-                        led.toggle(4, i)
+                        led.toggle(4, i % 5)
                     }
                 }
             }
@@ -41,17 +44,19 @@ namespace cyberbot{
         function rightNavLight(speed:number){
             while (rightIsRunning){
                 if (speed < 0){
-                    for (let i = 0; i <= 4; i++){
-                        led.toggle(0, i)
+                    for (let i = 2; i <= 6; i++){
+                        if (!rightIsRunning){break}
+                        led.toggle(0, i % 5)
                         pause(100)
-                        led.toggle(0, i)
+                        led.toggle(0, i % 5)
                     }
                 }
                 else if (speed > 0){
-                    for (let i = 4; i >= 0; i--){
-                        led.toggle(0, i)
+                    for (let i = 7; i >= 3; i--){
+                        if (!rightIsRunning){break}
+                        led.toggle(0, i % 5)
                         pause(100)
-                        led.toggle(0, i)
+                        led.toggle(0, i % 5)
                     }
                 }
             }
@@ -107,7 +112,7 @@ namespace cyberbot{
         // make wheels go vroom vroom
         
         /**
-        * Set the bot on a path. It will not stop unless told to stop. 
+        * Set the bot on a path. It will not stop unless told to stop 
         * @param direction, eg: NavDirection.Forward
         */
         //% block="go %direction"
@@ -118,7 +123,6 @@ namespace cyberbot{
             leftIsRunning = false;
             rightIsRunning = false;
             stopWheels();
-            pause(50)
             let leftSpeed: number;
             let rightSpeed: number;
             if (direction === NavDirection.Forward){
@@ -150,7 +154,7 @@ namespace cyberbot{
 
 
         /**
-        * Move the bot in a direction for a certain number of seconds. 
+        * Move the bot in a direction for a certain number of seconds 
         * @param direction, eg: NavDirection.Forward
         * @param duration of time in seconds, eg: 1
         */
@@ -186,7 +190,7 @@ namespace cyberbot{
 
 
         /**
-        * Set the bot on a path at a certain percent of full speed. 
+        * Set the bot on a path at a certain percent of full speed
         * @param direction, eg: NavDirection.Forward
         * @param speed is percentage of full speed, eg: 100
         */
@@ -235,11 +239,12 @@ namespace cyberbot{
             sendCommand(rightServo, SERVO_DISABLE, 0, null);
             leftIsRunning = false;
             rightIsRunning = false;
+            pause(50);
         }
 
 
         /**
-         * Drive by specifying how fast each wheel should spin and for how long.
+         * Drive by specifying how fast each wheel should spin and for how long
          * @param leftSpeed is a percentage of the left wheel's full speed, eg: 100
          * @param rightSpeed is a percentage of the right wheel's full speed, eg: 100
          * @param time is time in seconds, eg: 1 
