@@ -1,6 +1,7 @@
 
 //% color=#1D75B5 weight=100 icon="\uf2db" block="cyber:bot"
-//% groups='["Basic Read/Write", "Servos", "Other"]'
+//% groups='["Basic Read/Write", "Sound", "Servos", "Other"]'
+//% blockGap=4
 namespace cyberbot{
 
     // commands
@@ -178,7 +179,7 @@ namespace cyberbot{
         */
         //% block="%pin tone freq %f dur %d "
         //% pin.fieldEditor="gridpicker"
-        //% group="Other"
+        //% group="Sound"
         //% weight=102
         export function tone(pin: BotPin, frequency: number, duration: number): void{
             sendCommand(pin, FREQOUT, 0, duration, frequency);
@@ -195,7 +196,7 @@ namespace cyberbot{
 
         //% block="%pin servo angle %v"
         //% group="Servos"
-        //% weight=198
+        //% weight=196
         export function servoAngle(pin: BotPin, angle:number=null):void{
             let cmd = SERVO_ANGLE;
             if (angle === null){cmd = SERVO_DISABLE;}
@@ -220,9 +221,20 @@ namespace cyberbot{
 
         //% block="%pin servo accelerate %acceleration"
         //% group="Servos"
-        //% weight=196
+        //% weight=198
         export function servoAccelerate(pin: BotPin, acceleration: number):void{
             sendCommand(pin, SERVO_SETRAMP, 0, acceleration, null)
+        }
+
+        /**
+        * Stop a servo. 
+        * @param pin The pin connected to the servo, eg: BotPin.Pin18
+        */
+        //% block="%pin servo stop"
+        //% group="Servos"
+        //% weight=194
+        export function servoStop(pin: BotPin): void{
+            sendCommand(pin, SERVO_DISABLE, 0, null, null);
         }
 
         //% block
