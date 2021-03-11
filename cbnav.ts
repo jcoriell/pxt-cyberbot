@@ -1,7 +1,7 @@
 
 namespace cyberbot{
 
-        let navLightIsOn = false;
+        let navlightIsOn = false;
 
         /**
          * Toggle the navigation lights
@@ -12,8 +12,8 @@ namespace cyberbot{
         //% control.shadow="toggleOnOff"
         //% weight=890
         //% group="Settings"
-        export function navLightToggle(control: boolean): void{
-            navLightIsOn = control;
+        export function navlightToggle(control: boolean): void{
+            navlightIsOn = control;
         }
 
         let leftIsRunning = false;
@@ -81,20 +81,25 @@ namespace cyberbot{
         let leftReverseSpeed = -75
         let rightReverseSpeed = 75
 
-        //% block="calibrate forward: %fAdjustment calibrate backward: %bAdjustment"
-        //% fAdjustment.min=-15
-        //% fAdjustment.max=15
-        //% rAdjustment.min=-15
-        //% rAdjustment.max=15
+        /**
+         * Calibrate the wheels' speeds for going forward and/or backward. 
+         * Moving the sliders to the right makes the right wheel go faster.
+         * Moving the sliders to the left makes the left wheel go faster
+         * @param forwardAdjustment adjusts the wheels' speeds for when the bot goes forward
+         * @param reverseAdjustment adjusts the wheels' speeds for when the bot goes in reverse
+         */
+        //% block="calibrate forward: %forwardAdjustment calibrate backward: %backwardAdjustment"
+        //% forwardAdjustment.min=-15 forwardAdjustment.max=15
+        //% reverseAdjustment.min=-15 reverseAdjustment.max=15
         //% inlineInputMode="external"
         //% weight=900
         //% subcategory="Navigation"
         //% group="Settings"
-        export function calibrate(fAdjustment: number, rAdjustment: number): void{
-            leftForwardSpeed -= fAdjustment;
-            rightForwardSpeed -= fAdjustment;
-            leftReverseSpeed += rAdjustment;
-            rightReverseSpeed += rAdjustment;
+        export function calibrateWheelspeed(forwardAdjustment: number, reverseAdjustment: number): void{
+            leftForwardSpeed -= forwardAdjustment;
+            rightForwardSpeed -= forwardAdjustment;
+            leftReverseSpeed += reverseAdjustment;
+            rightReverseSpeed += reverseAdjustment;
         }
 
         
@@ -109,10 +114,10 @@ namespace cyberbot{
         //% subcategory="Navigation"
         //% group="Directional"
         //% weight=200
-        export function navForever(direction: NavDirection): void{
+        export function nav(direction: NavDirection): void{
             leftIsRunning = false;
             rightIsRunning = false;
-            stop();
+            stopWheels();
             pause(50)
             let leftSpeed: number;
             let rightSpeed: number;
@@ -136,7 +141,7 @@ namespace cyberbot{
             sendCommand(rightServo, SERVO_SPEED, 0, rightSpeed);
             leftIsRunning = true;
             rightIsRunning = true;
-            if (navLightIsOn){
+            if (navlightIsOn){
                 control.inBackground(() => leftNavLight(leftSpeed));
                 control.inBackground(() => rightNavLight(rightSpeed));
             }
@@ -153,7 +158,7 @@ namespace cyberbot{
         //% subcategory="Navigation"
         //% group="Directional"
         //% weight=100
-        export function navDuration(direction: NavDirection, duration: number): void{
+        export function navWithDuration(direction: NavDirection, duration: number): void{
             let leftSpeed: number;
             let rightSpeed: number;
             if (direction === NavDirection.Forward){
@@ -175,7 +180,7 @@ namespace cyberbot{
             sendCommand(leftServo, SERVO_SPEED, 0, leftSpeed);
             sendCommand(rightServo, SERVO_SPEED, 0, rightSpeed);
             pause(duration * 1000)
-            stop()
+            stopWheels()
         }
 
 
@@ -191,7 +196,7 @@ namespace cyberbot{
         //% subcategory="Navigation"
         //% weight=35
         //% group="Directional"
-        export function navSpeed(direction: NavDirection, speed: number): void{
+        export function navWithSpeed(direction: NavDirection, speed: number): void{
             if (speed > 100){speed = 100;}
             if (speed < 0){speed = 0;}
             let leftSpeed: number;
@@ -225,7 +230,7 @@ namespace cyberbot{
         //% subcategory="Navigation"
         //% weight=0
         //% group="Directional"
-        export function stop(): void{
+        export function stopWheels(): void{
             sendCommand(leftServo, SERVO_DISABLE, 0, null);
             sendCommand(rightServo, SERVO_DISABLE, 0, null);
             leftIsRunning = false;
