@@ -34,27 +34,58 @@ namespace cyberbot{
         let selection = 0
         led.plot(selection, 2)
        
-            input.onButtonPressed(Button.A, function () {
+    
+        input.onButtonPressed(Button.A, function () {
+            selection -= 1;
+            if (selection < 0) {selection = 0}
+            basic.clearScreen()
+            led.plot(selection, 2)
+        })
+
+        input.onButtonPressed(Button.B, function () {
+            selection += 1;
+            if (selection > 4) {selection = 4}
+            basic.clearScreen()
+            led.plot(selection, 2)
+        })
+
+        input.onButtonPressed(Button.AB, function () {
+            basic.clearScreen();
+            execute(selection);
+            basic.clearScreen();
+            led.plot(selection, 2)
+        })
+         
+    }
+
+    //% block="use program menu 2"
+    export function useProgramMenu2(): void{
+        let selection = 0
+        led.plot(selection, 2)
+        while (true) {
+            if (input.buttonIsPressed(Button.A)) {
                 selection -= 1;
                 if (selection < 0) {selection = 0}
                 basic.clearScreen()
                 led.plot(selection, 2)
-            })
-            input.onButtonPressed(Button.B, function () {
+            } 
+            else if (input.buttonIsPressed(Button.B)) {
                 selection += 1;
                 if (selection > 4) {selection = 4}
                 basic.clearScreen()
                 led.plot(selection, 2)
-            })
-            input.onButtonPressed(Button.AB, function () {
+            } 
+            else if (input.buttonIsPressed(Button.AB)) {
                 basic.clearScreen();
                 execute(selection);
                 basic.clearScreen();
                 led.plot(selection, 2)
-            })
-      
-
+            }
+            pause(50)
+        }
+        
     }
+
 
 }
 
