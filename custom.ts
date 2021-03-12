@@ -63,7 +63,13 @@ namespace cyberbot{
         let selection = 0
         led.plot(selection, 2)
         while (true) {
-            if (input.buttonIsPressed(Button.A)) {
+            if (input.buttonIsPressed(Button.AB)) {
+                basic.clearScreen();
+                execute(selection);
+                basic.clearScreen();
+                led.plot(selection, 2)
+            }
+            else if (input.buttonIsPressed(Button.A)) {
                 selection -= 1;
                 if (selection < 0) {selection = 0}
                 basic.clearScreen()
@@ -75,13 +81,8 @@ namespace cyberbot{
                 basic.clearScreen()
                 led.plot(selection, 2)
             } 
-            else if (input.buttonIsPressed(Button.AB)) {
-                basic.clearScreen();
-                execute(selection);
-                basic.clearScreen();
-                led.plot(selection, 2)
-            }
-            pause(50)
+
+            pause(250)
         }
         
     }
