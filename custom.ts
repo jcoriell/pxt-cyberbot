@@ -25,8 +25,9 @@ namespace cyberbot{
     /**
      * A simple event taking a function handler
      */
-    //% block="store as %menuItem on menu as %name"
+    //% block="save %menuItem as %name"
     //% weight=1001
+    //% group="Menu"
     export function setProgram(menuItem: BotMenu, name: string, customFunction: () => void) {
         if (menuItem === BotMenu.Program1){
             program1.action = customFunction;
@@ -67,7 +68,7 @@ namespace cyberbot{
         else if (menuItem === BotMenu.Program3){name = program3.name}
         else if (menuItem === BotMenu.Program4){name = program4.name}
         else if (menuItem === BotMenu.Program5){name = program5.name}
-        basic.showString(name)
+        basic.showString(name, 100)
     }
 
   
@@ -97,9 +98,10 @@ namespace cyberbot{
             led.plot(selection, 2)
         })
 
-        input.onGesture(Gesture.ScreenUp, function () {
+        input.onGesture(Gesture.LogoUp, function () {
             basic.clearScreen();
             showName(selection);
+            basic.clearScreen();
             led.plot(selection, 2)
         })
          

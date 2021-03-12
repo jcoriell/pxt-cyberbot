@@ -1,6 +1,6 @@
 
 //% color=#1D75B5 weight=100 icon="\uf2db" block="cyber:bot"
-//% groups='["Basic Read/Write", "Sound", "Servos", "Other"]'
+//% groups='["Basic Read/Write", "Sound", "Servos", "Menu", "Other"]'
 //% blockGap=4
 namespace cyberbot{
 
@@ -46,10 +46,11 @@ namespace cyberbot{
     let isConnected = false;
 
     function connect(){
-
+        pins.digitalWritePin(DigitalPin.P8, 0)
+        pins.digitalWritePin(DigitalPin.P8, 1)
         while (true) {
             if (pins.i2cReadNumber(ADDRESS, NumberFormat.UInt16LE) !== 0){
-                 pins.digitalWritePin(DigitalPin.P8, 1)
+                //pins.digitalWritePin(DigitalPin.P8, 1)
                 pause(10);
                 pins.i2cWriteNumber(ADDRESS, 12, NumberFormat.UInt16LE);
                 pause(10);

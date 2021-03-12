@@ -1,1 +1,1 @@
-<xml xmlns="https://developers.google.com/blockly/xml"><block type="pxt-on-start" id="ANQCCk+_Uagn3:J%vp8^" x="0" y="0"/></xml>
+<xml xmlns="https://developers.google.com/blockly/xml"><block type="cyberbot_setProgram" id="PlW%08Qvh|vfcK[;uvCF" x="0" y="0"><field name="menuItem">BotMenu.Program1</field><value name="name"><shadow type="text" id="r1+u@=M7D|Vu_T;8+m,x"><field name="TEXT">H</field></shadow></value><statement name="HANDLER"><block type="basic_show_icon" id="d~0D@ygCeL(eg7TyV8yg"><field name="i">IconNames.Heart</field></block></statement></block></xml>
