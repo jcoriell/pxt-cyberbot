@@ -39,6 +39,7 @@ namespace cyberbot{
                     }
                 }
             }
+            basic.clearScreen()
         }
 
         function rightNavLight(speed:number){
@@ -60,6 +61,7 @@ namespace cyberbot{
                     }
                 }
             }
+            basic.clearScreen()
         }
 
         let leftServo = ServoPin.Pin18

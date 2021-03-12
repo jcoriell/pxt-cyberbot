@@ -1,40 +1,80 @@
 
 namespace cyberbot{
 
-    let program1 = () => basic.showString("Empty");
-    let program2 = () => basic.showString("Empty");
-    let program3 = () => basic.showString("Empty");
-    let program4 = () => basic.showString("Empty");
-    let program5 = () => basic.showString("Empty");
+    let program1 = {
+        action: () => basic.showString("Empty", 100),
+        name: "Empty"
+    }
+    let program2 = {
+        action: () => basic.showString("Empty", 100),
+        name: "Empty"
+    }
+    let program3 = {
+        action: () => basic.showString("Empty", 100),
+        name: "Empty"
+    }
+    let program4 = {
+        action: () => basic.showString("Empty", 100),
+        name: "Empty"
+    }
+    let program5 = {
+        action: () => basic.showString("Empty", 100),
+        name: "Empty"
+    }
 
     /**
      * A simple event taking a function handler
      */
-    //% block="set %menuItem"
+    //% block="store as %menuItem on menu as %name"
     //% weight=1001
-    export function setProgram(menuItem: BotMenu, customFunction: () => void) {
-        if (menuItem === BotMenu.Program1){program1 = customFunction;}
-        if (menuItem === BotMenu.Program2){program2 = customFunction;}
-        if (menuItem === BotMenu.Program3){program3 = customFunction;}
-        if (menuItem === BotMenu.Program4){program4 = customFunction;}
-        if (menuItem === BotMenu.Program5){program5 = customFunction;}
+    export function setProgram(menuItem: BotMenu, name: string, customFunction: () => void) {
+        if (menuItem === BotMenu.Program1){
+            program1.action = customFunction;
+            program1.name = name;
+        }
+        if (menuItem === BotMenu.Program2){
+            program2.action = customFunction;
+            program2.name = name;
+        }
+        if (menuItem === BotMenu.Program3){
+            program3.action = customFunction;
+            program3.name = name;
+        }
+        if (menuItem === BotMenu.Program4){
+            program4.action = customFunction;
+            program4.name = name;
+        }
+        if (menuItem === BotMenu.Program5){
+            program5.action = customFunction;
+            program5.name = name;
+        }
+        useProgramMenu();
     }
 
-    //% block="execute %menuItem"
-    export function execute(menuItem: BotMenu):void{
-        if (menuItem === BotMenu.Program1){program1();}
-        if (menuItem === BotMenu.Program2){program2();}
-        if (menuItem === BotMenu.Program3){program3();}
-        if (menuItem === BotMenu.Program4){program4();}
-        if (menuItem === BotMenu.Program5){program5();}
+ 
+    function execute(menuItem: BotMenu): void{
+        if (menuItem === BotMenu.Program1){program1.action();}
+        else if (menuItem === BotMenu.Program2){program2.action();}
+        else if (menuItem === BotMenu.Program3){program3.action();}
+        else if (menuItem === BotMenu.Program4){program4.action();}
+        else if (menuItem === BotMenu.Program5){program5.action();}
     }
 
-    //% block="use program menu"
-    export function useProgramMenu(): void{
+    function showName(menuItem: BotMenu): void{
+        let name: string;
+        if (menuItem === BotMenu.Program1){name = program1.name}
+        else if (menuItem === BotMenu.Program2){name = program2.name}
+        else if (menuItem === BotMenu.Program3){name = program3.name}
+        else if (menuItem === BotMenu.Program4){name = program4.name}
+        else if (menuItem === BotMenu.Program5){name = program5.name}
+        basic.showString(name)
+    }
+
+  
+    function useProgramMenu(): void{
         let selection = 0
         led.plot(selection, 2)
        
-    
         input.onButtonPressed(Button.A, function () {
             selection -= 1;
             if (selection < 0) {selection = 0}
@@ -52,39 +92,17 @@ namespace cyberbot{
         input.onButtonPressed(Button.AB, function () {
             basic.clearScreen();
             execute(selection);
+            pause(10)
             basic.clearScreen();
             led.plot(selection, 2)
         })
+
+        input.onGesture(Gesture.ScreenUp, function () {
+            basic.clearScreen();
+            showName(selection);
+            led.plot(selection, 2)
+        })
          
-    }
-
-    //% block="use program menu 2"
-    export function useProgramMenu2(): void{
-        let selection = 0
-        led.plot(selection, 2)
-        while (true) {
-            if (input.buttonIsPressed(Button.AB)) {
-                basic.clearScreen();
-                execute(selection);
-                basic.clearScreen();
-                led.plot(selection, 2)
-            }
-            else if (input.buttonIsPressed(Button.A)) {
-                selection -= 1;
-                if (selection < 0) {selection = 0}
-                basic.clearScreen()
-                led.plot(selection, 2)
-            } 
-            else if (input.buttonIsPressed(Button.B)) {
-                selection += 1;
-                if (selection > 4) {selection = 4}
-                basic.clearScreen()
-                led.plot(selection, 2)
-            } 
-
-            pause(250)
-        }
-        
     }
 
 
