@@ -1,3 +1,4 @@
-cyberbot.setProgram(BotMenu.Program1, "H", function () {
-    basic.showIcon(IconNames.Heart)
-})
+cyberbot.navWithDuration(NavDirection.Forward, 3)
+cyberbot.navWithDuration(NavDirection.Left, 3)
+cyberbot.navWithDuration(NavDirection.Right, 3)
+cyberbot.navWithDuration(NavDirection.Reverse, 3)

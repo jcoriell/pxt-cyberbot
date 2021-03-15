@@ -105,7 +105,11 @@ namespace cyberbot{
             return pins.i2cReadBuffer(ADDRESS, 4)[3]
         }
 
-        // change cmd param to dropdown with HIGH/LOW
+        /**
+         * Write a digital signal.
+         * @param pin is a bot pin number
+         * @param state is either High (1) or Low (0)
+         */
         //% block="%p write digital %s"
         //% group="Basic Read/Write"
         //% weight=100
@@ -113,6 +117,12 @@ namespace cyberbot{
             sendCommand(pin, state, 0, null, null);
         }
 
+
+        /**
+         * Write an analog signal
+         * @param pin is a bot pin number
+         * @param f is a number 
+         */
         //% block="%pin write analog %f"
         //% group="Basic Read/Write"
         //% weight=94
@@ -120,6 +130,10 @@ namespace cyberbot{
             sendCommand(pin, PWM_OUT, 0, f, null);
         }
 
+
+        /**
+         * Read a digital signal. Returns a 1 for High a 0 for Low
+         */
         //% block="%pin read digital"
         //% group="Basic Read/Write"
         //% weight=98
@@ -130,6 +144,9 @@ namespace cyberbot{
             else {return 0;}
         }
 
+        /**
+         * Read a digital signal. Returns true for high and false for low.
+         */
         //% block="%pin is high"
         //% group="Basic Read/Write"
         //% weight=96
