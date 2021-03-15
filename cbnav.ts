@@ -64,6 +64,7 @@ namespace cyberbot{
             basic.clearScreen()
         }
 
+        // default configuration for left and right servos
         let leftServo = ServoPin.Pin18
         let rightServo = ServoPin.Pin19
     
@@ -82,7 +83,7 @@ namespace cyberbot{
             rightServo = rightPin;
         }
 
-
+        // default speeds for full speed forward and reverse for each servo
         let leftForwardSpeed = 75
         let rightForwardSpeed = -75
         let leftReverseSpeed = -75
@@ -228,6 +229,7 @@ namespace cyberbot{
 
             pause(10)
         }
+
 
         /**
         * Stop the left and right wheels' servos. 

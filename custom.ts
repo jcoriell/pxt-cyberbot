@@ -1,6 +1,7 @@
 
 namespace cyberbot{
 
+    // blank programs for each menu item
     let program1 = {
         action: () => basic.showString("Empty", 100),
         name: "Empty"
@@ -23,7 +24,10 @@ namespace cyberbot{
     }
 
     /**
-     * A simple event taking a function handler
+     * Set a program as one of the menu items. 
+     * Navigate through the menu by pressing button A and button B.
+     * Select a program to run by pressing both button A and button B simultaneously.
+     * This block utilizes on button pressed and on gesture, causing them to be disabled elsewhere.
      */
     //% block="save %menuItem as %name"
     //% weight=1001
@@ -52,7 +56,7 @@ namespace cyberbot{
         useProgramMenu();
     }
 
- 
+    // execute a program
     function execute(menuItem: BotMenu): void{
         if (menuItem === BotMenu.Program1){program1.action();}
         else if (menuItem === BotMenu.Program2){program2.action();}
@@ -61,6 +65,7 @@ namespace cyberbot{
         else if (menuItem === BotMenu.Program5){program5.action();}
     }
 
+    // show the name of a program
     function showName(menuItem: BotMenu): void{
         let name: string;
         if (menuItem === BotMenu.Program1){name = program1.name}
@@ -71,7 +76,7 @@ namespace cyberbot{
         basic.showString(name, 100)
     }
 
-  
+    // use the menu for the program
     function useProgramMenu(): void{
         let selection = 0
         led.plot(selection, 2)
