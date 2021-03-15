@@ -50,7 +50,6 @@ namespace cyberbot{
         pins.digitalWritePin(DigitalPin.P8, 1)
         while (true) {
             if (pins.i2cReadNumber(ADDRESS, NumberFormat.UInt16LE) !== 0){
-                //pins.digitalWritePin(DigitalPin.P8, 1)
                 pause(10);
                 pins.i2cWriteNumber(ADDRESS, 12, NumberFormat.UInt16LE);
                 pause(10);
@@ -204,14 +203,6 @@ namespace cyberbot{
         }
 
 
-        //% block
-        //% group="Other"
-        //% weight=94
-        export function irDetect(){
-            //reconstruct the buffer that is sent here
-        }
-
-
         //% block="%pin servo angle %v"
         //% group="Servos"
         //% weight=196
@@ -220,6 +211,7 @@ namespace cyberbot{
             if (angle === null){cmd = SERVO_DISABLE;}
             sendCommand(pin, cmd, 0, angle, null);
         }
+
 
         /**
         * Set a servo's speed. 
@@ -236,6 +228,7 @@ namespace cyberbot{
             if (velocity === null){cmd = SERVO_DISABLE};
             sendCommand(pin, cmd, 0, velocity, null);
         }
+
 
         //% block="%pin servo accelerate %acceleration"
         //% group="Servos"
@@ -254,6 +247,17 @@ namespace cyberbot{
         export function servoStop(pin: BotPin): void{
             sendCommand(pin, SERVO_DISABLE, 0, null, null);
         }
+
+
+
+        //% block
+        //% group="Other"
+        //% weight=94
+        export function irDetect(){
+            //reconstruct the buffer that is sent here
+        }
+
+
 
         //% block
         //% group="Other"
